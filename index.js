@@ -1,131 +1,147 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const rep_canvas = document.getElementById('rep_canvas');
+let info = document.getElementById('info');
+const ctx = rep_canvas.getContext('2d');
+const MassNum = document.getElementById('MassNumValue');
+const AtomicNum = document.getElementById('AtomicNumValue');
+// Set Particles
+m = 12;
+// m should = atomic mass
+a = 6;
+// a should = atomic number
+const nr = 4;
+const sr = 8;
+let s = 1;
+let x = 8;
+let y = 8;
+export function drawShit(m) {
+    let I = 0
+    while ( m > 0 ) {
+    let n = Math.min (Math.floor (Math.PI * s * sr / nr), m) 
+    let theta = 2 * Math.PI / n
+    for (let i = 0; i < n; i++) {
+    let x1 = 320 + s * sr * Math.cos(theta * i)
+    let y1 = 320 + s * sr * Math.sin(theta * i) 
+    
+    const neutron = {
+    x: x1, 
+    y: y1,
+    radius: 4,
+    color: "blue"
+}
+let a1 = a;    
+if (a1 > 0) {
+        
+        if (I % 2 == 0) {
+            neutron.color = 'red'
+            a1 -= 1}
+            else {
+            neutron.color = 'blue' }
+               }
 
-document.addEventListener('click', handleClick);
-function handleClick(e) {
-    console.log(e.key)
-    const coords = getCursorPosition (canvas, e)
-    bouncing_circle.x = coords.x
-    bouncing_circle.y = coords.y
-    drawCircleObj(bouncing_circle);
-    }
-
-function getCursorPosition(canvas, event) {
-    const rect = canvas.getBoundingClientRect(); // Get the canvas position and size
-    const x = event.clientX - rect.left; // Calculate X relative to canvas
-    const y = event.clientY - rect.top;  // Calculate Y relative to canvas
-    return { x, y };
+    else {
+        neutron.color = 'blue' 
+         }
+        drawCircleObj(neutron)
+         I += 1
+}       
+s += 1
+m -= n
 }
 
-const size_inputw = document.getElementById('size_inputw');
-size_inputw.onchange = () => canvas.width = size_inputw.value;
-
-const size_inputh = document.getElementById('size_inputh');
-size_inputh.onchange = () => canvas.height = size_inputh.value;
-
-const circ_rad = document.getElementById('circ_rad');
-circ_rad.onchange = () => bouncing_circle.radius = circ_rad.value;
-
-
-function userSizeInput(e) {
-    onkeydown('Enter') = console.log(size_input.value)
 }
-
-let x = 32;
-let y = 32;
-let draw1 = 0;
-
-function drawCircleObj(obj) {
+export function drawCircleObj(obj) {
     ctx.fillStyle = obj.color;
     ctx.beginPath();
     ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
     ctx.fill();
 }
+//number of electrons
+//electron in question
+let electX = 1;
+let electY = 1;
 
-const bouncing_circle = {
-    x: 32, 
-    y: 32,
-    radius: 32,
-    hspeed: 2,
-    vspeed: 2,
-    color: "blue"
+const electron = {
+    x: electX,
+    y: electY,
+    radius: 1,
+    color: 'pink'
 }
 
-const erase_circle = {
-    x:32,
-    y:32,
-    radius: 32,
-    color: "black"
+//code for how the electron behaves
+export function makeElectObj(obj, r) {
+    let theta = Math.random()*2*(Math.PI);
+    obj.x = (r*Math.cos(theta)+320);
+    obj.y = (r*Math.sin(theta)+320);
+    ctx.fillStyle = obj.color;
+    ctx.beginPath();
+    ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+    ctx.fill();
+
 }
-
-
-const drawOpacitySlider = document.getElementById('drawOpacity');
-const drawOpacityOutput1 = document.getElementById('drawOpacityOutput');
-
-drawOpacitySlider.addEventListener('input', function() {
-    //drawOpacityOutput1 / 100 = drawOpacityOutput1;
-    drawOpacityOutput1.textContent = this.value;
-});
-ctx.globalAlpha = drawOpacityOutput1;
-
-
-
-
-
-//Drawing Code Here//
-let isDrawing = false;
-let lastX = 0;
-let lastY = 0;
-
-canvas.addEventListener('mousedown', (e) => {
-    isDrawing = true;
-    [lastX, lastY] = [e.offsetX, e.offsetY];
-});
-
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mouseup', () => isDrawing = false);
-canvas.addEventListener('mouseout', () => isDrawing = false);
-
-function draw(e) {
-    if (!isDrawing) return; // Stop the function from running when not clicked
+//code for making electrons
+export function makeShells(a){
+    console.log(a);
+    m1 = 2;
+    se = 1;
+    n1 = 0;
+    for (let x = 0; x<a; x++){
     
-    bouncing_circle.x = lastX
-    bouncing_circle.y = lastY
-    drawCircleObj(bouncing_circle);
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(e.offsetX, e.offsetY);
+        r = ((Math.random() * 10 + (20*se)) + (s*10));
+        makeElectObj(electron, r);
+        n1++;
+
+        if (n1 >= m1) {
+            m1 += 4;
+            se += 1;
+            n1 = 0;
+            electron.color = electron.color == 'pink' ? 'cyan' : 'pink';
+        }
+
+    }
+    electron.color = 'pink';
+}
+
+
+//text info for each element, to be displayed when the page is loaded. Will be added to as more elements are added.
+const infoText = [
+    "This is not to scale, a real neucleus is about 100,000 times smaller than the atom. And electrons are 'point particles' with no size at all.",
+    "The shells are not actually circular, they are more like clouds of probability. The electrons are not actually orbiting the nucleus, they are more like standing waves around the nucleus.",
+    "The colors of the electrons are not actually pink and cyan, they are just a visual representation to help differentiate between the shells.",
+    "This is a very simplified model of an atom, there are many more subatomic particles and interactions that are not represented here."
+]
+//function to display the text info for each element, to be called when the page is loaded. Will be added to as more elements are added.
+export function makeInfo(){
+    n1 = Math.floor(Math.random()*4);
+    info.innerHTML = "Fun Fact: " + infoText[n1];
+}
+
+
+//full animation loop
+export function drawLoop() {
+    //Clear canvas
+        ctx.clearRect(0, 0, rep_canvas.width, rep_canvas.height);
+
+    //Update objects
+
+    drawShit(m)
+    makeShells(a);
+
+    //Draw objects
+
+    //Call drawLoop
     
-
-    // Update lastX and lastY to the current mouse position for the next segment
-    [lastX, lastY] = [e.offsetX, e.offsetY];
+    requestAnimationFrame(drawLoop);
+    s = 1
+    I = 0
+    m = parseInt(MassNumValue.value)
+    a = parseInt(AtomicNumValue.value)
 }
-//Drawing Code Here//
-
-const color_picker = document.getElementById("color_picker")
-     color_picker.onchange = ()=> canvas.style.backgroundColor = color_picker.value;
-
-const color_picker_draw = document.getElementById("color_picker_draw")
-     color_picker_draw.onchange = ()=> bouncing_circle.color = color_picker_draw.value;
-
-
-// 1. Define the function to run when the button is clicked
-function buttonOnAction() {
-    bouncing_circle.color = color_picker.value;
+export function ShowAtom(a, m) {
+    makeInfo();
+    drawLoop(); 
 }
-function buttonOffAction() {
-    bouncing_circle.color = color_picker_draw.value;
-}
+// Iniitial call to loop to start program
+//makeInfo();
 
-// 2. Select the button element
-const erase_on = document.getElementById("erase_on");
-const erase_off = document.getElementById("erase_off");
-
-// 3. Add the event listener
-erase_on.addEventListener("click", buttonOnAction);
-erase_off.addEventListener("click", buttonOffAction);
-
-     function drawLoop() {
-
-}
-
-drawLoop()
+//drawLoop();
+ShowAtom(a, m)
