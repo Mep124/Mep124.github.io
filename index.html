@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WNPaint</title>
+        <link rel="stylesheet" href="styles.css">
+
+    </head>
+    <body>
+        <div class="container">
+            <label for="color_picker">Background Color:</label>
+            <input type="color" id="color_picker">
+            <label for="color_picker_draw">Brush Color:</label>
+            <input type="color" id="color_picker_draw">
+            <label for="size_inputw">Canvas Size L:</label>
+            <input type="text" id ="size_inputw">
+            <label for="size_inputh">Canvas Size H:</label>
+            <input type="text" id ="size_inputh">
+            <label for="circ_rad">Brush Size:</label>
+            <input type="text" id ="circ_rad">
+            <label for="drawOpacity">Opacity:</label>
+            <input type="range" id="drawOpacity" min="0" max="1" step="0.01" value="1">
+            <button id="erase_off">Erase Off</button>
+            <button id="erase_on">Erase On</button>
+            
+            
+            
+            <canvas id="canvas" width="1200" height="700"></canvas>
+
+<section id="content">
+<section id="left"></section>
+<main>
+
+</main>
+<section id="right"></section>
+</section>
+        </div>
+        <script src="index.js"></script>
+    </body>
+</html>
